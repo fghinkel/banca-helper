@@ -24,6 +24,7 @@
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",
     "@types/bootstrap": "^5.2.10",
+    "@types/lodash": "^4.17.21",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/eslint-config-prettier": "^10.2.0",
@@ -32,6 +33,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-vue": "~10.5.1",
     "jiti": "^2.6.1",
+    "lodash": "^4.17.21",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
     "sass-embedded": "^1.96.0",
