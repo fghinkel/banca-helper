@@ -35,21 +35,12 @@
             :range="{ max: 100, min: 0 }"
           />
         </div>
-        <div class="col-md-3">
-          <NumericInput
-            label-background-color="light"
-            font-color="dark"
-            id="numeric"
-            placeholder="% odd"
-            :decimal-precision="2"
-            v-model="form.odd"
-            :range="{ max: 100, min: 0 }"
-          />
-        </div>
       </div>
     </FormWrapper>
 
-    <ResultTable :form :gales="galesPercent" />
+    <div class="result-wrapper">
+      <ResultTable :form="form" :gales="galesPercent" />
+    </div>
   </BoxWrapper>
 </template>
 
@@ -88,3 +79,11 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.result-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+</style>

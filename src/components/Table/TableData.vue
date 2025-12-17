@@ -4,24 +4,36 @@
       <table class="table table-striped table-hover align-middle mb-0">
         <thead>
           <tr>
-            <th scope="col" class="first-header">Gale</th>
-            <th scope="col" class="text-end">Porcentagem</th>
-            <th scope="col" class="text-end">Entrada</th>
-            <th scope="col" class="text-end">Banca (Green)</th>
-            <th scope="col" class="last-header text-end">Banca (Red)</th>
+            <th scope="col" style="width: 5%" class="first-header">Gale</th>
+            <th scope="col" style="width: 10%" class="text-center">Porcentagem</th>
+            <th scope="col" style="width: 20%" class="text-center">Entrada</th>
+            <th scope="col" style="width: 20%" class="text-center">Odd</th>
+            <th scope="col" style="width: 30%" class="text-center">Banca (Green)</th>
+            <th scope="col" style="width: 30%" class="last-header text-center">Banca (Red)</th>
           </tr>
         </thead>
 
         <tbody>
           <template v-for="(gale, i) in gales" :key="i">
             <tr>
-              <td>{{ i + 1 }}</td>
-              <td class="text-end">{{ gale }}%</td>
-              <td class="text-end">R$ {{ findGaleValue(gale, form.value) }}</td>
-              <td class="text-end text-success fw-semibold">
-                R$ {{ sumValueFromTotal(gale, form.value, i - 1) }}
+              <td class="text-center">{{ i + 1 }}</td>
+              <td class="text-center">{{ gale }}%</td>
+              <td class="text-center">R$ {{ findGaleValue(gale, form.value) }}</td>
+              <td class="text-center d-flex justify-content-end">
+                <div style="width: 90%">
+                  <NumericInput
+                    :id="`${i}-odd`"
+                    :placeholder="`Odd gale ${i + 1}`"
+                    v-model="galesOds[i]"
+                  />
+                </div>
               </td>
-              <td class="text-end text-danger fw-semibold">R$ {{ subtractValueFromTotal(i) }}</td>
+              <td class="text-center text-success fw-semibold">
+                R$ {{ sumValueFromTotal(gale, form.value, i) }}
+              </td>
+              <td class="text-center text-danger fw-semibold">
+                R$ {{ subtractValueFromTotal(i) }}
+              </td>
             </tr>
           </template>
         </tbody>
@@ -32,10 +44,12 @@
 
 <script lang="ts">
 import type { FormValue } from '@/entities/form-value'
-import { defineComponent, type PropType } from 'vue'
+import { defineComponent, ref, type PropType } from 'vue'
+import NumericInput from '../Input/NumericInput.vue'
 
 export default defineComponent({
   name: 'TableData',
+  components: { NumericInput },
   props: {
     form: {
       type: Object as PropType<FormValue>,
@@ -47,6 +61,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const galesOds = ref<number[]>([])
+
     const findGaleValue = (percentage: number, value: number) =>
       parseFloat((value * (percentage / 100)).toFixed(2))
 
@@ -66,8 +82,10 @@ export default defineComponent({
 
     const sumValueFromTotal = (percentage: number, value: number, currentGale: number) => {
       let totalValueForSubtract = 0
+      const index = currentGale - 1
       const total = props.form.value
-      for (let galeIndex = currentGale; galeIndex >= 0; galeIndex--) {
+
+      for (let galeIndex = index; galeIndex >= 0; galeIndex--) {
         const gale = props.gales[galeIndex] ?? 0
 
         const value = (total * (gale / 100)).toFixed(2)
@@ -76,15 +94,15 @@ export default defineComponent({
       }
 
       const galeValue = findGaleValue(percentage, value)
-      const odd = props.form.odd / 100
+      const odd = (galesOds.value[currentGale] ?? 0) / 100
       const valueToSum = galeValue * (odd * 100)
 
-      const newTotal = (total - galeValue - totalValueForSubtract + valueToSum).toFixed(2)
+      const newTotal = (total - totalValueForSubtract + valueToSum).toFixed(2)
 
       return parseFloat(newTotal)
     }
 
-    return { findGaleValue, subtractValueFromTotal, sumValueFromTotal }
+    return { galesOds, findGaleValue, subtractValueFromTotal, sumValueFromTotal }
   },
 })
 </script>

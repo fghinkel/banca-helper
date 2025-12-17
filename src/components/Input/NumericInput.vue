@@ -71,7 +71,7 @@ export default defineComponent({
     },
     labelBackgroundColor: {
       type: String as PropType<'light' | 'dark'>,
-      default: 'dark',
+      default: 'light',
     },
     mask: {
       required: false,
@@ -137,10 +137,7 @@ export default defineComponent({
     const onEnter = (value: Event) => emit('onEnter', value)
 
     const customStyle = computed(() => ({
-      '--label-bg':
-        props.labelBackgroundColor == 'light'
-          ? 'var(--light-background-color)'
-          : 'var(--dark-background-color)',
+      '--label-bg': props.labelBackgroundColor == 'light' ? '#fff' : 'var(--dark-background-color)',
       '--font-color':
         props.fontColor == 'light' ? 'var(--light-font-color)' : 'var(--dark-font-color)',
     }))
@@ -202,6 +199,7 @@ export default defineComponent({
   left: 5%;
   font-size: 0.8em;
   color: var(--pm-button-color);
+  border-radius: 1.25rem;
   background-color: var(--label-bg);
   padding: 0 0.5em;
 }

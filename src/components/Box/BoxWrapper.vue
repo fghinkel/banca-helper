@@ -28,6 +28,7 @@ export default defineComponent({
 
   .box-wrapper {
     min-height: 90vh;
+    max-height: 90vh;
     padding: 1rem;
     border-radius: 2rem;
     background-color: #fff;
