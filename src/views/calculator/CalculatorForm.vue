@@ -1,7 +1,7 @@
 <template>
   <BoxWrapper>
     <FormWrapper>
-      <div class="row">
+      <div class="centralize row">
         <div class="col-md-3">
           <NumericInput
             label-background-color="light"

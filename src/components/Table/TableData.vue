@@ -7,9 +7,10 @@
             <th scope="col" style="width: 5%" class="first-header">Gale</th>
             <th scope="col" style="width: 10%" class="text-center">Porcentagem</th>
             <th scope="col" style="width: 20%" class="text-center">Entrada</th>
-            <th scope="col" style="width: 20%" class="text-center">Odd</th>
-            <th scope="col" style="width: 30%" class="text-center">Banca (Green)</th>
-            <th scope="col" style="width: 30%" class="last-header text-center">Banca (Red)</th>
+            <th scope="col" style="width: 22%" class="text-center">Odd</th>
+            <th scope="col" style="width: 10%" class="text-center">Ganho estimado</th>
+            <th scope="col" style="width: 10%" class="text-center">Banca (Green)</th>
+            <th scope="col" style="width: 10%" class="last-header text-center">Banca (Red)</th>
           </tr>
         </thead>
 
@@ -20,13 +21,16 @@
               <td class="text-center">{{ gale }}%</td>
               <td class="text-center">R$ {{ findGaleValue(gale, form.value) }}</td>
               <td class="text-center d-flex justify-content-end">
-                <div style="width: 90%">
+                <div style="width: 100%">
                   <NumericInput
                     :id="`${i}-odd`"
                     :placeholder="`Odd gale ${i + 1}`"
                     v-model="galesOds[i]"
                   />
                 </div>
+              </td>
+              <td class="text-center text-success fw-semibold">
+                R$ {{ estimatedGain(gale, form.value, i) }}
               </td>
               <td class="text-center text-success fw-semibold">
                 R$ {{ sumValueFromTotal(gale, form.value, i) }}
@@ -80,6 +84,15 @@ export default defineComponent({
       return (total - totalValueForSubtract).toFixed(2)
     }
 
+    const estimatedGain = (percentage: number, value: number, index: number): number => {
+      const gain = findGaleValue(percentage, value) ?? 0
+      const odd = galesOds.value[index] ?? 0
+      if (!odd) return 0
+
+      const estimatedGain = (gain * odd - gain).toFixed(2)
+      return parseFloat(estimatedGain)
+    }
+
     const sumValueFromTotal = (percentage: number, value: number, currentGale: number) => {
       let totalValueForSubtract = 0
       const total = props.form.value
@@ -100,7 +113,7 @@ export default defineComponent({
       return parseFloat(newTotal)
     }
 
-    return { galesOds, findGaleValue, subtractValueFromTotal, sumValueFromTotal }
+    return { galesOds, findGaleValue, estimatedGain, subtractValueFromTotal, sumValueFromTotal }
   },
 })
 </script>
