@@ -82,10 +82,9 @@ export default defineComponent({
 
     const sumValueFromTotal = (percentage: number, value: number, currentGale: number) => {
       let totalValueForSubtract = 0
-      const index = currentGale - 1
       const total = props.form.value
 
-      for (let galeIndex = index; galeIndex >= 0; galeIndex--) {
+      for (let galeIndex = currentGale; galeIndex >= 0; galeIndex--) {
         const gale = props.gales[galeIndex] ?? 0
 
         const value = (total * (gale / 100)).toFixed(2)
@@ -96,7 +95,6 @@ export default defineComponent({
       const galeValue = findGaleValue(percentage, value)
       const odd = (galesOds.value[currentGale] ?? 0) / 100
       const valueToSum = galeValue * (odd * 100)
-
       const newTotal = (total - totalValueForSubtract + valueToSum).toFixed(2)
 
       return parseFloat(newTotal)
